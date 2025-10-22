@@ -22,3 +22,10 @@ src/taxipred/data/*.pkl
 src/taxipred/data/cleaned_*.csv
 training_columns.joblib
 .env
+
+# Python packaging/build artifacts
+*.egg-info/
+*.dist-info/
+.eggs/
+build/
+dist/
