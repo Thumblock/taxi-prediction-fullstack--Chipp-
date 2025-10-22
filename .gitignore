@@ -1,0 +1,24 @@
+# venv & caches
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# editor/OS
+.DS_Store
+.vscode/
+.idea/
+
+# notebooks
+.ipynb_checkpoints/
+
+# data & outputs
+src/taxipred/data/*.joblib
+src/taxipred/data/*.pkl
+src/taxipred/data/cleaned_*.csv
+training_columns.joblib
+.env
