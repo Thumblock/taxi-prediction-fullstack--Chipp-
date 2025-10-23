@@ -11,6 +11,7 @@ setup(
         "pandas",
         "numpy",
         "scikit-learn",
+        "nbformat",
         "matplotlib",
         "joblib",
         "fastapi",
