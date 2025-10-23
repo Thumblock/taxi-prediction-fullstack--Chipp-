@@ -72,4 +72,4 @@ nb = new_notebook(
 with open("explorations/eda.ipynb", "w", encoding="utf-8") as f:
     nbf.write(nb, f)
 
-print("✅ Wrote explorations/eda.ipynb (clean, no triple quotes)")
+print("Wrote explorations/eda.ipynb (clean)")
