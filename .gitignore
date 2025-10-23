@@ -16,6 +16,9 @@ __pycache__/
 # notebooks
 .ipynb_checkpoints/
 
+# EDA figures (generated)
+explorations/figs/
+
 # data & outputs
 src/taxipred/data/*.joblib
 src/taxipred/data/*.pkl

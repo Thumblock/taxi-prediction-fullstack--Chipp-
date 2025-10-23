@@ -11,6 +11,7 @@ setup(
         "pandas",
         "numpy",
         "scikit-learn",
+        "matplotlib",
         "joblib",
         "fastapi",
         "uvicorn[standard]",
