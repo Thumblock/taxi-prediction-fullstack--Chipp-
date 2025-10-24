@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from taxipred.utils.constants import TARGET_COL  # single source of truth
 
 def clean_and_engineer(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -22,3 +23,13 @@ def clean_and_engineer(df: pd.DataFrame) -> pd.DataFrame:
             df[c] = df[c].clip(lower=lo, upper=hi)
 
     return df
+
+#Return (with_label, no_label) DataFrames. Rows with NaN target will be used for predictions later.
+def split_labeled_unlabeled(df: pd.DataFrame, target_col: str = TARGET_COL):
+    
+    if target_col not in df.columns:
+        return df.copy(), df.iloc[0:0].copy()
+
+    with_label = df[df[target_col].notna()].copy()
+    no_label = df[df[target_col].isna()].copy()
+    return with_label, no_label
