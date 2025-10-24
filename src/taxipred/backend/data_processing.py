@@ -13,4 +13,12 @@ def clean_and_engineer(df: pd.DataFrame) -> pd.DataFrame:
         if c in df.columns:
             df.loc[df[c] < 0, c] = np.nan
 
+    # Clip extreme numeric values to 1%–99% range
+    num_cols = df.select_dtypes(include=[np.number]).columns
+    for c in num_cols:
+        s = df[c].dropna()
+        if len(s) >= 10:  # enough data to compute quantiles
+            lo, hi = s.quantile([0.01, 0.99])
+            df[c] = df[c].clip(lower=lo, upper=hi)
+
     return df
