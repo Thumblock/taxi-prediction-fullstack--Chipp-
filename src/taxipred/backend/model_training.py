@@ -17,19 +17,22 @@ from taxipred.backend.data_processing import (
     split_labeled_unlabeled,
     prepare_xy,
 )
+def main() -> None:
+    # Load dataset from packaged path
+    df = pd.read_csv(TAXI_CSV_PATH)
+    print("Loaded:", TAXI_CSV_PATH, "| shape:", df.shape)
 
-# Load dataset from packaged path
-df = pd.read_csv(TAXI_CSV_PATH)
-print("Loaded:", TAXI_CSV_PATH, "| shape:", df.shape)
+    # Apply package-wide cleaning (normalize strings, fix negatives, clip outliers)
+    df = clean_and_engineer(df)
 
-# Apply package-wide cleaning (normalize strings, fix negatives, clip outliers)
-df = clean_and_engineer(df)
+    # Supervised training: keep only rows that have a label/target
+    with_label, no_label = split_labeled_unlabeled(df, TARGET_COL)
+    print("with_label:", with_label.shape, "| no_label (for future predictions):", no_label.shape)
 
-# Supervised training: keep only rows that have a label/target
-with_label, no_label = split_labeled_unlabeled(df, TARGET_COL)
-print("with_label:", with_label.shape, "| no_label (for future predictions):", no_label.shape)
+    # Split features/target — X for inputs, y for ground-truth label
+    # If TARGET_COL is missing, prepare_xy raises a clear KeyError (better to fail early)
+    X, y = prepare_xy(with_label, TARGET_COL)
+    print("Prepared X/y:", X.shape, y.shape)
 
-# Split features/target — X for inputs, y for ground-truth label
-# If TARGET_COL is missing, prepare_xy raises a clear KeyError (better to fail early)
-X, y = prepare_xy(with_label, TARGET_COL)
-print("Prepared X/y:", X.shape, y.shape)
+if __name__ == "__main__":
+    main()
