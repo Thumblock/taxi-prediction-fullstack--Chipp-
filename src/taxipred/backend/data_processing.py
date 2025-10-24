@@ -33,3 +33,16 @@ def split_labeled_unlabeled(df: pd.DataFrame, target_col: str = TARGET_COL):
     with_label = df[df[target_col].notna()].copy()
     no_label = df[df[target_col].isna()].copy()
     return with_label, no_label
+
+#Infer numeric and categorical feature columns by dtype.
+def infer_feature_columns(df: pd.DataFrame, target_col: str = TARGET_COL):
+    
+    # Numeric feature columns (float/int)
+    num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    if target_col in num_cols:
+        num_cols.remove(target_col)
+
+    # Categorical feature columns (object/category)
+    cat_cols = df.select_dtypes(include=["object", "category"]).columns.tolist()
+
+    return num_cols, cat_cols
