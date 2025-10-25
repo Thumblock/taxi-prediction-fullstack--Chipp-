@@ -23,6 +23,7 @@ explorations/figs/
 src/taxipred/data/*.joblib
 src/taxipred/data/*.pkl
 src/taxipred/data/cleaned_*.csv
+src/taxipred/data/model_meta.json
 training_columns.joblib
 .env
 
