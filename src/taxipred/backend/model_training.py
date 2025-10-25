@@ -1,12 +1,26 @@
-# Goal of this module (step 2):
-# - Load CSV (via TAXI_CSV_PATH), apply the same cleaning functions. 
-# - Keep only rows that have labels for supervised learning
-# - Split into X (features) and y (target), ready for ML
-# - Add: train/test split, infer numeric/categorical features, build shared preprocessor.
+# Goal of this module (step 3):
+# - After building preprocessor, train two models (LR, RF) with identical preprocessing.
+# - Print metrics: MAE, RMSE, R².
 
 
 import pandas as pd
-from sklearn.model_selection import train_test_split 
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, r2_score
+
+# RMSE import helper
+try:
+    from sklearn.metrics import root_mean_squared_error as _rmse
+    def rmse(y_true, y_pred):
+        return float(_rmse(y_true, y_pred))
+except Exception:
+    from sklearn.metrics import mean_squared_error as _mse
+    def rmse(y_true, y_pred):
+        return float(np.sqrt(_mse(y_true, y_pred)))
 
 # Project-wide single sources of truth:
 from taxipred.utils.constants import TAXI_CSV_PATH, TARGET_COL
@@ -20,6 +34,7 @@ from taxipred.backend.data_processing import (
     infer_feature_columns,
     build_preprocessor,
 )
+
 def main() -> None:
     # Load dataset from packaged path
     df = pd.read_csv(TAXI_CSV_PATH)
@@ -52,6 +67,34 @@ def main() -> None:
     # Build preprocessor (Shared : training and inference)
     pre = build_preprocessor(num_cols,cat_cols)
     print("Preprocessor ready.")
+
+    # Define candidate models
+    models = {
+        "LinearRegression": LinearRegression(),
+        "RandomForest": RandomForestRegressor(
+            n_estimators=200, max_depth=None, random_state=42, n_jobs=-1
+        ),
+    }
+
+    # Small helper to compute metrics
+    def evaluate(pipe, Xte, yte):
+        pred = pipe.predict(Xte)
+        return {
+            "MAE": mean_absolute_error(yte, pred),
+            "RMSE": rmse(yte, pred),
+            "R2": r2_score(yte, pred),
+        }
+    results = {}
+    for name, model in models.items():
+        pipe = Pipeline([("prep", pre),("model", model)])
+        pipe.fit(X_train, y_train)
+        metrics = evaluate(pipe, X_test, y_test)
+        results[name] = metrics
+
+        print(f"== {name} ==")
+        print(f"MAE : {metrics['MAE']:.3f}")
+        print(f"RMSE : {metrics['RMSE']:.3f}")
+        print(f"R2 : {metrics['R2']:.4f}")
 
 if __name__ == "__main__":
     main()
