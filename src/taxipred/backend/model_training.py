@@ -25,14 +25,13 @@ except Exception:
         return float(np.sqrt(_mse(y_true, y_pred)))
 
 # Project-wide single sources of truth:
-from taxipred.utils.constants import TAXI_CSV_PATH, TARGET_COL, MODEL_PATH, META_PATH
+from taxipred.utils.constants import TAXI_CSV_PATH, TARGET_COL, MODEL_PATH, META_PATH, FEATURE_COLUMNS
 
 # Reuse shared, consistent data prep (train == inference):
 # reuse the same cleaning/transformation rules everywhere (training and later in the API), avoiding train/serve skew.
 from taxipred.backend.data_processing import (
     clean_and_engineer,
     split_labeled_unlabeled,
-    prepare_xy,
     infer_feature_columns,
     build_preprocessor,
 )
@@ -51,8 +50,9 @@ def main() -> None:
     if with_label.empty:
         raise RuntimeError("No Labeled rows found after cleaning.")
 
-    # Split features/target — X for inputs, y for ground-truth label
-    X, y = prepare_xy(with_label, TARGET_COL)
+    # Split features/target - X for inputs, y for ground-truth label
+    X = with_label[FEATURE_COLUMNS].copy()
+    y = pd.to_numeric(with_label[TARGET_COL], errors="coerce")
     print("Prepared X/y:", X.shape, y.shape)
 
     # Train/test split for honest evaluation

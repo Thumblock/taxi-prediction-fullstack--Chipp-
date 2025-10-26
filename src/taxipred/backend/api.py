@@ -1,4 +1,11 @@
+# Loads the trained sklearn Pipeline once (preprocessor + model)
+#   - Endpoints :
+#  - GET  /Health  -> status + if model is loaded.
+#  - POST /predict -> predict price from JSON
+
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import pandas as pd
 import joblib   
 
 from taxipred.utils.constants import MODEL_PATH
@@ -17,3 +24,11 @@ except Exception as e:
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded" : MODEL_PIPE is not None}
+
+class Predict(BaseModel):
+    Trip_Distance_km: float
+    Passenger_Count: int
+    Time_of_Day: str
+    Day_of_Week: str
+    Traffic_Conditions: str
+    Weather: str
