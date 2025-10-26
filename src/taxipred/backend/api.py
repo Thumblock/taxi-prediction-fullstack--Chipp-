@@ -25,10 +25,18 @@ except Exception as e:
 def health():
     return {"status": "ok", "model_loaded" : MODEL_PIPE is not None}
 
-class Predict(BaseModel):
+class Predict_Trip(BaseModel):
     Trip_Distance_km: float
     Passenger_Count: int
     Time_of_Day: str
     Day_of_Week: str
     Traffic_Conditions: str
     Weather: str
+
+@app.post("/predict")
+def predict(payload: Predict_Trip):
+    if MODEL_PIPE is None:
+        raise HTTPException(status_code=503, detail="Model not loaded (run training first)")
+    df = pd.DataFrame([payload.model_dump()])   
+    yhat = MODEL_PIPE.predict(df)
+    return {"predicted_price": float(yhat[0])}
