@@ -25,12 +25,12 @@ if st.button("Predict Price 💰"):
         "Weather": weather
     }
 
-try:
-        res = requests.post(API_URL, json=payload, timeout=5)
+    try:
+        res = requests.post(API_URL, json=payload, timeout=10)
         if res.ok:
             price = res.json().get("predicted_price")
             st.success(f"Estimated Price: **${price:.2f}**")
         else:
             st.error(f"Error {res.status_code}: {res.text}")
-except Exception as e:
+    except Exception as e:
         st.error(f"Connection error: {e}")
