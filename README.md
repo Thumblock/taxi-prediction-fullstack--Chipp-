@@ -32,3 +32,62 @@ The backend and frontend share the same 6-feature schema for consistent predicti
 4. Serve predictions with FastAPI
 
 5. Interact through Streamlit frontend
+
+---
+
+
+## 🔧 How to Run
+
+1. create venv (if you don't already have one)
+uv venv
+# Git Bash
+source .venv/Scripts/activate
+# or macOS/Linux
+source .venv/bin/activate
+
+**Install packages**
+# install your package in editable mode
+uv pip install -e .
+
+## EDA 
+uv run python explorations/eda_quickcheck.py
+# (optional)Generate a clean EDA notebook.py
+uv run python explorations/make_eda_notebook.py
+
+# Train the model (Linear Regression vs RandomForest)
+uv run python src/taxipred/backend/model_training.py
+
+# Start the API
+uv run uvicorn taxipred.backend.api:app --reload
+** Sanity check the API: **
+Health:
+Browser: http://127.0.0.1:8000/health
+Expected: {"status":"ok","model_loaded":true}
+
+# Run the Streamlit dashboard
+uv run streamlit run src/taxipred/frontend/dashboard.py
+
+
+----
+
+# Full Project Sanity Checklist
+
+Training runs end-to-end and saves artifacts:
+
+src/taxipred/data/model.joblib created ✅
+
+src/taxipred/data/model_meta.json created ✅
+
+“Sanity check passed” printed ✅
+
+API boots and loads model:
+
+/health → model_loaded: true ✅
+
+Prediction works:
+
+Python or curl returns {"predicted_price": ...} ✅
+
+Dashboard works:
+
+UI submits payload → shows price ✅
