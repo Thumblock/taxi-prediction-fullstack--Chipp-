@@ -44,12 +44,29 @@ Both backend and frontend share the same **6-feature schema**, ensuring consiste
 
 ## 🔧 How to Run (using `uv`)
 
-### Create & activate virtual environment
+### 📦 1. Create & activate virtual environment
 ````bash
 uv venv
 
 # Activate:
-# Git Bash
+# Windows : Bash
 source .venv/Scripts/activate
 # macOS/Linux
 source .venv/bin/activate
+
+### 📦 2. Install the project in editable mode
+```bash
+uv pip install -e .
+
+📊 3. Run quick EDA scripts
+uv run python explorations/eda_quickcheck.py
+# (optional)
+uv run python explorations/make_eda_notebook.py
+
+🧠 4. Train the ML model
+uv run python src/taxipred/backend/model_training.py
+
+⚙️ 5. Start FastAPI backend
+uv run uvicorn taxipred.backend.api:app --reload
+Visit: http://127.0.0.1:8000/health
+Expected response: {"status": "ok", "model_loaded": true}
