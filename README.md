@@ -43,10 +43,11 @@ Both backend and frontend share the same **6-feature schema**, ensuring consiste
 ---
 
 ## 🔧 How to Run (using `uv` in Terminal *bash*)
-In Visual Studio Code - click Terminal : New Terminal
+In Visual Studio Code - click Terminal : New Terminal, right bottom corner next to + sign click and choose *Bash*
 
 ### 📦 1. Create & activate virtual environment
 ````bash
+Write and run :
 uv venv
 
 # Activate:
