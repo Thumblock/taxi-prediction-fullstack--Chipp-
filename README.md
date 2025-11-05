@@ -78,7 +78,7 @@ uv run streamlit run src/taxipred/frontend/dashboard.py
 
 ````
 
----
+````bash
 🗂️ Project Structure & Setup
 
 taxipred/                      # your repo root
@@ -106,3 +106,4 @@ taxipred/                      # your repo root
 │           └── helpers.py           # read_api_endpoint, post_api_endpoint, get_base_url...
 ├── README.md
 └── setup.py
+````
