@@ -75,3 +75,34 @@ Expected response: {"status": "ok", "model_loaded": true}
 Open another Terminal while you still have FastAPI running in first terminal *Bash*.
 🎨 6. Launch Streamlit Dashboard
 uv run streamlit run src/taxipred/frontend/dashboard.py
+
+````
+
+---
+🗂️ Project Structure & Setup
+
+taxipred/                      # your repo root
+├── explorations/              # EDA lives here
+│   ├── eda_quickcheck.py      # quick script EDA you run with uv
+│   ├── eda.ipynb              # generated / hand-edited notebook
+│   ├── make_eda_notebook.py   # generates explorations/eda.ipynb
+│   └── figs/                  # saved plots from EDA (ignored in .gitignore)
+│       ├── hist_*.png
+│       └── box_*.png
+├── src/
+│   └── taxipred/
+│       ├── backend/
+│       │   ├──api.py                # FastAPI: /health, /predict
+│       │   ├── data_processing.py   # clean_and_engineer, split_labeled_unlabeled, build_preprocessor
+│       │   └── model_training.py    # load CSV → clean → train LR/RF → save model.joblib + meta
+│       ├── frontend/
+│       │   └── dashboard.py         # Streamlit UI → POST to FastAPI
+│       ├── data/
+│       │   ├── model.joblib         # produced by model_training.py
+│       │   ├── model_meta.json      # produced by model_training.py
+│       │   └── taxi_trip_pricing.csv
+        └── utils/
+│           ├── constants.py         # paths, target name, feature list
+│           └── helpers.py           # read_api_endpoint, post_api_endpoint, get_base_url...
+├── README.md
+└── setup.py
